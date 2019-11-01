@@ -1,8 +1,6 @@
 #ifndef _LINUX_LIST_H
 #define _LINUX_LIST_H
 
-#include <sys/types.h>
-
 #define NULL 0
 
 #define offsetof(a,b) ((unsigned long)&(((a *)0)->b))
