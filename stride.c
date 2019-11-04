@@ -71,8 +71,8 @@ void stridetest(void)
   printf(1, "stride scheduling test OK\n");
 }
 
-int main(void)
-{
-  stridetest();
-  exit();
-}
+// int main(void)
+// {
+//   stridetest();
+//   exit();
+// }

@@ -90,3 +90,13 @@ sys_uptime(void)
   return xticks;
 }
 
+int
+sys_mycall(void)
+{
+  int pid;
+  if(argint(0, &pid) < 0)
+    return -1;
+
+  cprintf("[SYSCALL] hello user PID:%d\n",pid);
+  return 0;
+}
