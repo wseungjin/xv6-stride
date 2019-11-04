@@ -101,7 +101,7 @@ int sys_mysyscall(void)
   return 0;
 }
 
-int sys_mysyscall(int tickets)
+int sys_stride(int tickets)
 {
   float diff = myproc()->stride_info.tickets/tickets;
   myproc()->stride_info.stride = myproc()->stride_info.stride * diff;
