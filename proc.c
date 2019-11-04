@@ -1217,7 +1217,7 @@ void scheduler(void)
     p = remove_min(head);
     if(p != NULL)
     {
-      show pass_value 
+      // show pass_value 
       for(int i=0; i<p->pid; i++){
         cprintf("     ");
       }
