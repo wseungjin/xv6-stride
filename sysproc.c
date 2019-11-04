@@ -90,8 +90,8 @@ sys_uptime(void)
   return xticks;
 }
 
-int
-sys_mycall(void)
+
+int sys_mysyscall(void)
 {
   int pid;
   if(argint(0, &pid) < 0)
