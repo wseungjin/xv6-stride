@@ -100,3 +100,11 @@ int sys_mysyscall(void)
   cprintf("[SYSCALL] hello user PID:%d\n",pid);
   return 0;
 }
+
+int sys_mysyscall(int tickets)
+{
+  float diff = myproc()->stride_info.tickets/tickets;
+  myproc()->stride_info.stride = myproc()->stride_info.stride * diff;
+  // assign_tickets(tickets);
+  return 0;
+}

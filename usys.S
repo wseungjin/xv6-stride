@@ -30,5 +30,7 @@ SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(mysyscall)
+SYSCALL(stride)
+
 
 
