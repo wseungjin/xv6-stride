@@ -571,10 +571,10 @@ void scheduler(void)
     if(p != NULL)
     {
       // show pass_value 
-      // for(int i=0; i<p->pid; i++){
-      //   cprintf("     ");
-      // }
-      // cprintf("%d \n",p->stride_info.pass_value);
+      for(int i=0; i<p->pid; i++){
+        cprintf("     ");
+      }
+      cprintf("%d \n",p->stride_info.pass_value);
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
