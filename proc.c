@@ -46,7 +46,7 @@ struct proc *remove_min(struct list_head *head)
     list_for_each(iter,head)
     {
       p = list_entry(iter,struct proc,queue_elem);
-      if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
+      if(p->state == RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
       {
         list_del_init(&p->queue_elem);
         return p;
@@ -62,11 +62,9 @@ struct proc *remove_min(struct list_head *head)
 */
 void update_pass_value(struct proc *proc)
 {
-  if(proc==NULL)
-  {
-    return;
-  }
-  proc->stride_info.pass_value=proc->stride_info.pass_value + proc->stride_info.stride;
+  if(proc == NULL) return ;
+
+  proc->stride_info.pass_value+=proc->stride_info.stride;
  
   return;
 }
@@ -87,7 +85,7 @@ void update_min_pass_value()
   list_for_each(iter, &ptable.queue_head)
   {
     p = list_entry(iter,struct proc,queue_elem);
-    if(p->state==RUNNABLE&&(p->stride_info.pass_value<min ||min==-1))
+    if(p->state == RUNNABLE&& (min==-1 || p->stride_info.pass_value<min ))
     {
       min = p->stride_info.pass_value;
     } 
@@ -106,10 +104,7 @@ void update_min_pass_value()
 */
 void insert(struct list_head *head, struct proc *current)
 {
-  if(current==NULL)
-  {
-    return;
-  }
+  if(current == NULL) return ;
   list_add_tail(&current->queue_elem,head);
 
   return;
@@ -119,22 +114,19 @@ void insert(struct list_head *head, struct proc *current)
 */
 void assign_min_pass_value(struct proc *proc)
 {
-  if(proc==NULL)
-  {
-    return;
-  }
+  if(proc == NULL) return;
   proc->stride_info.pass_value=ptable.min_pass_value;
 
   return;
 }
 
-void assign_tickets(int tickets)
-{
-    mycpu()->proc->stride_info.tickets=tickets;
-    mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
+// void assign_tickets(int tickets)
+// {
+//     mycpu()->proc->stride_info.tickets=tickets;
+//     mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
 
-    return;
-}
+//     return;
+// }
 
 /* Initialize the process's stride_info member variables.
    The initial tickets value will be 100.
@@ -142,12 +134,9 @@ void assign_tickets(int tickets)
 */
 void initialize_stride_info(struct proc *proc)
 {
-  if(proc==NULL)
-  {
-    return;
-  }
+  if(proc == NULL) return ;
   proc->stride_info.tickets=100;
-  proc->stride_info.stride=STRIDE_LARGE_NUMBER/proc->stride_info.tickets;
+  proc->stride_info.stride=ptable.large_number/100;
   proc->stride_info.pass_value=0;
   return;
 }
