@@ -48,7 +48,7 @@ struct proc *remove_min(struct list_head *head)
       p = list_entry(iter,struct proc,queue_elem);
       if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
       {
-        list_del_init(iter);
+        list_del_init(&p->queue_elem);
 
         return p;
       } 
@@ -81,15 +81,14 @@ void update_min_pass_value()
 
   struct proc *p;
     
-  struct list_head *head = &ptable.queue_head;
   struct list_head *iter;
 
   long long min=-1; 
 
-  list_for_each(iter,head)
+  list_for_each(iter,&ptable.queue_head)
   {
     p = list_entry(iter,struct proc,queue_elem);
-    if(p->state==RUNNABLE&&(p->stride_info.pass_value<min ||min==-1))
+    if(p->state == RUNNABLE &&(min==-1 || p->stride_info.pass_value < min ))
     {
       min = p->stride_info.pass_value;
     } 
@@ -143,9 +142,15 @@ void assign_tickets(int tickets)
 */
 void initialize_stride_info(struct proc *proc)
 {
-  // please implement the function below
+  if(proc==NULL)
+  {
+    return;
+  }
+  proc->stride_info.tickets=100;
+  proc->stride_info.stride=STRIDE_LARGE_NUMBER/proc->stride_info.tickets;
+  proc->stride_info.pass_value=0;
+  return;
 }
-
 void pinit(void)
 {
   initlock(&ptable.lock, "ptable");
@@ -491,7 +496,7 @@ void scheduler(void)
   c->proc = 0;
 
   struct list_head *head = &ptable.queue_head;
-  struct list_head *iter;
+  // struct list_head *iter;
 
   for (;;)
   {
@@ -502,16 +507,14 @@ void scheduler(void)
     acquire(&ptable.lock);
 
     // The following part needs to be modified for stride scheduling
-    list_for_each(iter, head)
+    update_min_pass_value();
+    p = remove_min(head);
+    if(p != NULL)
     {
-      p = list_entry(iter, struct proc, queue_elem);
-
-      if (p->state != RUNNABLE)
-        continue;
-
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
+      for(int i=0; i<p->pid; i++){
+        cprintf("   ");
+      }
+      cprintf("%d\n", p->pid);
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
@@ -519,12 +522,14 @@ void scheduler(void)
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
       c->proc = 0;
-    }
 
+      update_pass_value(p);
+      insert(&ptable.queue_head, p);
+
+    }
     release(&ptable.lock);
+
   }
 }
 
