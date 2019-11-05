@@ -48,7 +48,7 @@ struct proc *remove_min(struct list_head *head)
       p = list_entry(iter,struct proc,queue_elem);
       if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
       {
-        list_del_init(iter);
+        list_del_init(&p->queue_elem);
 
         return p;
       } 
