@@ -34,90 +34,148 @@ static void wakeup1(void *chan);
    If there is no such a process, the function returns NULL.
    This function is called from scheduler().
 */
+// struct proc *remove_min(struct list_head *head)
+// {
+//     struct proc *p; 
+    
+//     struct list_head *iter;
+
+
+//     if(head == NULL) return NULL;
+
+//     list_for_each(iter,head)
+//     {
+//       p = list_entry(iter,struct proc,queue_elem);
+//       if(p->state == RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
+//       {
+//         list_del_init(&p->queue_elem);
+//         return p;
+//       } 
+//     }
+
+
+//   return NULL;
+// }
 struct proc *remove_min(struct list_head *head)
 {
-    struct proc *p; 
-    
-    struct list_head *iter;
+  // please implement the function below
+  struct list_head *iter;
+  struct proc *p;
 
-
-    if(head == NULL) return NULL;
-
-    list_for_each(iter,head)
-    {
-      p = list_entry(iter,struct proc,queue_elem);
-      if(p->state == RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
-      {
-        list_del_init(&p->queue_elem);
-        return p;
-      } 
+  if(head == NULL) return NULL;
+ 
+  list_for_each(iter, head){
+    p = list_entry(iter, struct proc, queue_elem);
+    if(p->state == RUNNABLE && p->stride_info.pass_value == ptable.min_pass_value){
+      list_del_init(&p->queue_elem);
+      return p;
     }
-
-
+  }
   return NULL;
 }
 
 /* Update the process' pass value after a run by the scheduler.
    This function is called from scheduler().
 */
+// void update_pass_value(struct proc *proc)
+// {
+//   if(proc == NULL) return ;
+
+//   proc->stride_info.pass_value+=proc->stride_info.stride;
+ 
+//   return;
+// }
 void update_pass_value(struct proc *proc)
 {
+  // please implement the function below
   if(proc == NULL) return ;
-
-  proc->stride_info.pass_value+=proc->stride_info.stride;
- 
-  return;
+  
+  proc->stride_info.pass_value += proc->stride_info.stride;
+  return ; 
 }
 
 /* Update the global variable, ptable.min_pass_value, after a process' run by the scheduler.
    The function assigns the lowest pass value among RUNNABLE processes to ptable.min_pass_value.
    This function is called from scheduler().
 */
+// void update_min_pass_value()
+// {
+
+//   struct proc *p;
+    
+//   struct list_head *iter;
+
+//   long long min=-1; 
+
+//   list_for_each(iter, &ptable.queue_head)
+//   {
+//     p = list_entry(iter,struct proc,queue_elem);
+//     if(p->state == RUNNABLE&& (min==-1 || p->stride_info.pass_value<min ))
+//     {
+//       min = p->stride_info.pass_value;
+//     } 
+//   }
+//   if(min==-1)
+//   {
+//     min=0;
+//   }
+//   ptable.min_pass_value=min;
+
+//   return;
+// }
 void update_min_pass_value()
 {
-
-  struct proc *p;
-    
+  // please implement the function below
   struct list_head *iter;
+  struct proc *p;
+  long long min_pass_value = -1;
 
-  long long min=-1; 
-
-  list_for_each(iter, &ptable.queue_head)
-  {
-    p = list_entry(iter,struct proc,queue_elem);
-    if(p->state == RUNNABLE&& (min==-1 || p->stride_info.pass_value<min ))
-    {
-      min = p->stride_info.pass_value;
-    } 
+  list_for_each(iter, &ptable.queue_head){
+    p = list_entry(iter, struct proc, queue_elem);
+    if(p->state == RUNNABLE && (min_pass_value == -1 || p->stride_info.pass_value < min_pass_value )){
+      min_pass_value = p->stride_info.pass_value;
+    }
   }
-  if(min==-1)
-  {
-    min=0;
-  }
-  ptable.min_pass_value=min;
-
-  return;
+  
+  if(min_pass_value == -1) min_pass_value = 0;
+  ptable.min_pass_value = min_pass_value;
+  
+  return ;
 }
 
 /* Insert the current process into the queue after a run by the scheduler.
    This function is called from scheduler().
 */
+// void insert(struct list_head *head, struct proc *current)
+// {
+//   if(current == NULL) return ;
+//   list_add_tail(&current->queue_elem,head);
+
+//   return;
+// }
 void insert(struct list_head *head, struct proc *current)
 {
+  // please implement the function below
   if(current == NULL) return ;
-  list_add_tail(&current->queue_elem,head);
-
-  return;
+  list_add_tail(&current->queue_elem, head);
+  return ;
 }
 /* Assign the lowest pass value in the system to a new process or wake-up process.
    This function is called from fork() and wakeup1().
 */
+// void assign_min_pass_value(struct proc *proc)
+// {
+//   if(proc == NULL) return;
+//   proc->stride_info.pass_value=ptable.min_pass_value;
+
+//   return;
+// }
 void assign_min_pass_value(struct proc *proc)
 {
-  if(proc == NULL) return;
-  proc->stride_info.pass_value=ptable.min_pass_value;
-
-  return;
+  // please implement the function below
+  if(proc == NULL) return ;
+  proc->stride_info.pass_value = ptable.min_pass_value;
+  return ;
 }
 
 // void assign_tickets(int tickets)
@@ -132,13 +190,22 @@ void assign_min_pass_value(struct proc *proc)
    The initial tickets value will be 100.
    This function is called from allocproc().
 */
+// void initialize_stride_info(struct proc *proc)
+// {
+//   if(proc == NULL) return ;
+//   proc->stride_info.tickets=100;
+//   proc->stride_info.stride=ptable.large_number/100;
+//   proc->stride_info.pass_value=0;
+//   return;
+// }
 void initialize_stride_info(struct proc *proc)
 {
+  // please implement the function below
   if(proc == NULL) return ;
-  proc->stride_info.tickets=100;
-  proc->stride_info.stride=ptable.large_number/100;
-  proc->stride_info.pass_value=0;
-  return;
+  proc->stride_info.stride = ptable.large_number/100;
+  proc->stride_info.tickets = 100;
+  proc->stride_info.pass_value = 0;
+  return ;
 }
 
 void pinit(void)
