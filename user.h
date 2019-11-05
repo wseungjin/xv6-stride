@@ -23,7 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int mysyscall(int);
+// int mysyscall(int);
 int stride(int);
 
 

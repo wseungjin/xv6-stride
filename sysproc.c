@@ -91,15 +91,15 @@ sys_uptime(void)
 }
 
 
-int sys_mysyscall(void)
-{
-  int pid;
-  if(argint(0, &pid) < 0)
-    return -1;
+// int sys_mysyscall(void)
+// {
+//   int pid;
+//   if(argint(0, &pid) < 0)
+//     return -1;
 
-  cprintf("[SYSCALL] hello user PID:%d\n",pid);
-  return 0;
-}
+//   cprintf("[SYSCALL] hello user PID:%d\n",pid);
+//   return 0;
+// }
 
 int sys_stride(int tickets)
 {
