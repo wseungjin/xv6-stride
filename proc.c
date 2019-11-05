@@ -546,6 +546,8 @@ int wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+
+
 void scheduler(void)
 {
   struct proc *p;
@@ -568,10 +570,15 @@ void scheduler(void)
     p = remove_min(head);
     if(p != NULL)
     {
-      for(int i=0; i<p->pid; i++){
-        cprintf("     ");
-      }
-      cprintf("%d \n",p->stride_info.pass_value);
+      // show pass_value 
+      // for(int i=0; i<p->pid; i++){
+      //   cprintf("     ");
+      // }
+      // cprintf("%d \n",p->stride_info.pass_value);
+
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
@@ -579,6 +586,8 @@ void scheduler(void)
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
       c->proc = 0;
 
       update_pass_value(p);
@@ -589,6 +598,50 @@ void scheduler(void)
 
   }
 }
+
+// void scheduler(void)
+// {
+//   struct proc *p;
+//   struct cpu *c = mycpu();
+//   c->proc = 0;
+
+//   struct list_head *head = &ptable.queue_head;
+//   // struct list_head *iter;
+
+//   for (;;)
+//   {
+//     // Enable interrupts on this processor.
+//     sti();
+
+//     // Loop over process table looking for process to run.
+//     acquire(&ptable.lock);
+
+//     // The following part needs to be modified for stride scheduling
+//     update_min_pass_value();
+//     p = remove_min(head);
+//     if(p != NULL)
+//     {
+//       for(int i=0; i<p->pid; i++){
+//         cprintf("     ");
+//       }
+//       cprintf("%d \n",p->stride_info.pass_value);
+//       c->proc = p;
+//       switchuvm(p);
+//       p->state = RUNNING;
+
+//       swtch(&(c->scheduler), p->context);
+//       switchkvm();
+
+//       c->proc = 0;
+
+//       update_pass_value(p);
+//       insert(&ptable.queue_head, p);
+
+//     }
+//     release(&ptable.lock);
+
+//   }
+// }
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
