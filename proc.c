@@ -81,11 +81,12 @@ void update_min_pass_value()
 
   struct proc *p;
     
+  struct list_head *head =&ptable.queue_head;
   struct list_head *iter;
 
   long long min=-1; 
 
-  list_for_each(iter,&ptable.queue_head)
+  list_for_each(iter,head)
   {
     p = list_entry(iter,struct proc,queue_elem);
     if(p->state == RUNNABLE &&(min==-1 || p->stride_info.pass_value < min ))
@@ -144,7 +145,7 @@ void initialize_stride_info(struct proc *proc)
     return;
   }
   proc->stride_info.tickets=100;
-  proc->stride_info.stride=STRIDE_LARGE_NUMBER/100;
+  proc->stride_info.stride=STRIDE_LARGE_NUMBER/proc->stride_info.tickets;
   proc->stride_info.pass_value=0;
   return;
 }
