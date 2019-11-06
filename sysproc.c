@@ -107,8 +107,6 @@ int sys_stride(void)
   if(argint(0, &tickets) < 0)
     return -1;
 
-  float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
-  myproc()->stride_info.stride *= diff;
-  // assign_tickets(tickets);
+  assign_tickets(tickets);
   return 0;
 }

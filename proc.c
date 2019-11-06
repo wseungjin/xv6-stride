@@ -125,12 +125,15 @@ void assign_min_pass_value(struct proc *proc)
   return;
 }
 
-// void assign_tickets(int tickets)
-// {
-//     mycpu()->proc->stride_info.tickets=tickets;
-//     mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
-//     return;
-// }
+void assign_tickets(int tickets)
+{
+    // float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
+    // myproc()->stride_info.stride *= diff;
+
+    mycpu()->proc->stride_info.tickets=tickets;
+    mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
+    return;
+}
 
 /* Initialize the process's stride_info member variables.
    The initial tickets value will be 100.
