@@ -129,9 +129,9 @@ void assign_tickets(int tickets)
 {
     // float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
     // myproc()->stride_info.stride *= diff;
-    struct cpu *c = mycpu();
-    c->proc->stride_info.tickets=tickets;
-    c->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
+    struct proc *p= myproc();
+    p->stride_info.tickets=tickets;
+    p->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
     return;
 }
 
