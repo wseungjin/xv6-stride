@@ -91,13 +91,9 @@ void update_min_pass_value()
     if(p->state == RUNNABLE &&(min==-1 || p->stride_info.pass_value < min ))
     {
       min = p->stride_info.pass_value;
+      ptable.min_pass_value=min;
     } 
   }
-  if(min==-1)
-  {
-    min=0;
-  }
-  ptable.min_pass_value=min;
 
   return;
 }
@@ -129,12 +125,12 @@ void assign_min_pass_value(struct proc *proc)
   return;
 }
 
-void assign_tickets(int tickets)
-{
-    mycpu()->proc->stride_info.tickets=100;
-    mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/100;
-    return;
-}
+// void assign_tickets(int tickets)
+// {
+//     mycpu()->proc->stride_info.tickets=tickets;
+//     mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
+//     return;
+// }
 
 /* Initialize the process's stride_info member variables.
    The initial tickets value will be 100.
