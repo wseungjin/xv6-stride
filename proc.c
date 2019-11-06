@@ -131,8 +131,8 @@ void assign_min_pass_value(struct proc *proc)
 
 void assign_tickets(int tickets)
 {
-    mycpu()->proc->stride_info.tickets=tickets;
-    mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
+    mycpu()->proc->stride_info.tickets=100;
+    mycpu()->proc->stride_info.stride=STRIDE_LARGE_NUMBER/100;
     return;
 }
 
