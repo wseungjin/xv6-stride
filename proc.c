@@ -224,6 +224,7 @@ static struct proc *allocproc(void)
   /* stride scheduling */
   initialize_stride_info(p);
 
+
   p->state = EMBRYO;
   p->pid = nextpid++;
 
@@ -510,7 +511,7 @@ void scheduler(void)
       for(int i=0; i<p->pid; i++){
         cprintf("   ");
       }
-      cprintf("%d\n", p->stride_info.stride);
+      cprintf("%d\n", p->stride_info.pass_value);
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
