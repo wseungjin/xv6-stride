@@ -147,7 +147,7 @@ void initialize_stride_info(struct proc *proc)
     return;
   }
   proc->stride_info.tickets=100;
-  proc->stride_info.stride=STRIDE_LARGE_NUMBER/proc->stride_info.tickets;
+  proc->stride_info.stride=STRIDE_LARGE_NUMBER/100;
   proc->stride_info.pass_value=0;
   return;
 }
