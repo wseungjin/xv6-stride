@@ -103,8 +103,8 @@ sys_uptime(void)
 
 int sys_stride(int tickets)
 {
-  float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
-  myproc()->stride_info.stride = myproc()->stride_info.stride * diff;
+  // float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
+  // myproc()->stride_info.stride = myproc()->stride_info.stride * diff;
   // assign_tickets(tickets);
   return 0;
 }
