@@ -101,11 +101,14 @@ sys_uptime(void)
 //   return 0;
 // }
 
-int sys_stride(int tickets)
+int sys_stride(void)
 {
-  // float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
-  // cprintf("  %f\n",diff);
-  // myproc()->stride_info.stride *= diff;
-  // // assign_tickets(tickets);
+  int tickets;
+  if(argint(0, &tickets) < 0)
+    return -1;
+
+  float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
+  myproc()->stride_info.stride *= diff;
+  // assign_tickets(tickets);
   return 0;
 }
