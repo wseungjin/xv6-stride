@@ -514,7 +514,7 @@ void scheduler(void)
       for(int i=0; i<p->pid; i++){
         cprintf("   ");
       }
-      cprintf("%d\n", p->stride_info.pass_value);
+      cprintf("%d\n", p->stride_info.stride);
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
