@@ -48,7 +48,7 @@ struct proc *remove_min(struct list_head *head)
       p = list_entry(iter,struct proc,queue_elem);
       if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
       {
-        list_del_init(&p->queue_elem);
+        list_del_init(iter);
 
         return p;
       } 
@@ -127,8 +127,6 @@ void assign_min_pass_value(struct proc *proc)
 
 void assign_tickets(int tickets)
 {
-    // float diff = (float)(myproc()->stride_info.tickets)/(float)tickets;
-    // myproc()->stride_info.stride *= diff;
     struct proc *p= myproc();
     p->stride_info.tickets=tickets;
     p->stride_info.stride=STRIDE_LARGE_NUMBER/tickets;
