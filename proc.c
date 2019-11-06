@@ -495,7 +495,6 @@ void scheduler(void)
   c->proc = 0;
 
   struct list_head *head = &ptable.queue_head;
-  // struct list_head *iter;
 
   for (;;)
   {
@@ -510,10 +509,6 @@ void scheduler(void)
     p = remove_min(head);
     if(p != NULL)
     {
-      for(int i=0; i<p->pid; i++){
-        cprintf("   ");
-      }
-      cprintf("%d\n", p->stride_info.pass_value);
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
@@ -525,7 +520,6 @@ void scheduler(void)
 
       update_pass_value(p);
       insert(&ptable.queue_head, p);
-
     }
     release(&ptable.lock);
 
