@@ -104,9 +104,9 @@ sys_uptime(void)
 int sys_stride(void)
 {
   int tickets;
-  if(argint(0, &tickets) < 0)
+  if(argint(0, &tickets) < 0)//티켓 받아온다
     return -1;
 
-  assign_tickets(tickets);
+  assign_tickets(tickets);//각 프로세스에 실제 티켓들을 할당해준다 
   return 0;
 }
