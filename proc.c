@@ -41,16 +41,16 @@ struct proc *remove_min(struct list_head *head)
     struct list_head *iter;
 
 
-    if(head == NULL) return NULL;
+    if(head == NULL) return NULL;// null 이면 실행 X
 
-    list_for_each(iter,head)
+    list_for_each(iter,head)//현재 리스트에 존재하는 모든 프로세스를 확인
     {
-      p = list_entry(iter,struct proc,queue_elem);
-      if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )
+      p = list_entry(iter,struct proc,queue_elem);//리스트에 있는 프로세스를 꺼낸다
+      if(p->state==RUNNABLE && p->stride_info.pass_value==ptable.min_pass_value )//runable이고 모든 stride 스케쥴링의 min pass value 와 현재의 process의 pass value가 같으면 삭제해줌
       {
-        list_del_init(iter);
+        list_del_init(iter);//삭제
 
-        return p;
+        return p;//그리고 그 process 반환 
       } 
     }
 
@@ -67,7 +67,7 @@ void update_pass_value(struct proc *proc)
   {
     return;
   }
-  proc->stride_info.pass_value=proc->stride_info.pass_value + proc->stride_info.stride;
+  proc->stride_info.pass_value=proc->stride_info.pass_value + proc->stride_info.stride;//현재 프로세스에 패스 밸류 값에 자기 stride값을 더해 업데이트한다
  
   return;
 }
@@ -84,15 +84,15 @@ void update_min_pass_value()
   struct list_head *head =&ptable.queue_head;
   struct list_head *iter;
 
-  long long min=-1; 
+  long long min=-1; //제일 작은 min pass value찾기 위한 값이며 처음 발견 했을 경우 아무 값이나 넣어주기 위해 -1을 먼저 초기화 해주었다
 
-  list_for_each(iter,head)
+  list_for_each(iter,head)//리스트에 들어있는 모든 프로세스 확인
   {
-    p = list_entry(iter,struct proc,queue_elem);
-    if(p->state == RUNNABLE &&(min==-1 || p->stride_info.pass_value < min ))
+    p = list_entry(iter,struct proc,queue_elem);//프로세스 꺼내기
+    if(p->state == RUNNABLE &&(min==-1 || p->stride_info.pass_value < min ))//상태가 러너블이고 min값을 업데이트 할 수 있거나 아니면 최초값이면 현재 스테이트의 패스밸류로 min값을 업데이트한다
     {
-      min = p->stride_info.pass_value;
-      ptable.min_pass_value=min;
+      min = p->stride_info.pass_value;//업데이트
+      ptable.min_pass_value=min;//테이블에 저장
     } 
   }
 
@@ -102,7 +102,7 @@ void update_min_pass_value()
 /* Insert the current process into the queue after a run by the scheduler.
    This function is called from scheduler().
 */
-void insert(struct list_head *head, struct proc *current)
+void insert(struct list_head *head, struct proc *current)//위의 절차를 끝내고 다시 그 프로세스를 인서트해서 반복되게 해준다.
 {
   if(current==NULL)
   {
@@ -115,18 +115,18 @@ void insert(struct list_head *head, struct proc *current)
 /* Assign the lowest pass value in the system to a new process or wake-up process.
    This function is called from fork() and wakeup1().
 */
-void assign_min_pass_value(struct proc *proc)
+void assign_min_pass_value(struct proc *proc)// 새로운 프로세스가 들어왔을때 그 새로운 프로세스가 스트라이드 스케쥴링에서 실행을 독점하지 않도록 minpass 밸류로 패스밸류를 업데이트를 해주는 함수이다 
 {
   if(proc==NULL)
   {
     return;
   }
-  proc->stride_info.pass_value=ptable.min_pass_value;
+  proc->stride_info.pass_value=ptable.min_pass_value;//
 
   return;
 }
 
-void assign_tickets(int tickets)
+void assign_tickets(int tickets)// 각 프로세스에 해당되는 티켓을 할당하는 함수이며 나중에 system call 에 쓰인다
 {
     struct proc *p= myproc();
     p->stride_info.tickets=tickets;
@@ -138,7 +138,7 @@ void assign_tickets(int tickets)
    The initial tickets value will be 100.
    This function is called from allocproc().
 */
-void initialize_stride_info(struct proc *proc)
+void initialize_stride_info(struct proc *proc)// 처음에 스트라이드와 티켓 그리고 패스 밸류를 초기화 하는 함수
 {
   if(proc==NULL)
   {
@@ -505,8 +505,8 @@ void scheduler(void)
     acquire(&ptable.lock);
 
     // The following part needs to be modified for stride scheduling
-    update_min_pass_value();
-    p = remove_min(head);
+    update_min_pass_value();//global min pass value를 업데이트 하고 시작
+    p = remove_min(head);//가장 minpass value가 낮은 프로세스를 꺼내온다
     if(p != NULL)
     {
       c->proc = p;
@@ -518,8 +518,8 @@ void scheduler(void)
 
       c->proc = 0;
 
-      update_pass_value(p);
-      insert(&ptable.queue_head, p);
+      update_pass_value(p);//실행 다하고 그 프로세스의 pass value를 업데이트한다
+      insert(&ptable.queue_head, p);//그 후 다시 프로세스를 list에 넣어준다
     }
     release(&ptable.lock);
 
